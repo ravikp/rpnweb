@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'spring-boot'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+mainClassName = 'org.tw.rpn.MainRpnCalculator'
+
+jar {
+    baseName = 'rpnweb'
+    version = '0.1.0'
+}
+
+repositories {
+    jcenter()
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
+}
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+dependencies {
+
+    compile 'org.scala-lang:scala-library:2.11.8'
+    compile 'org.scala-lang:scala-compiler:2.11.8'
+
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.scalatest:scalatest_2.11:2.2.2'
+
+    //spring boot
+    compile("org.springframework.boot:spring-boot-starter-web:1.4.1.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-jetty:1.4.1.RELEASE")
+    testCompile('org.springframework.boot:spring-boot-starter-test:1.4.1.RELEASE')
+}
+
+task spec(dependsOn: ['testClasses'], type: JavaExec) {
+    main = 'org.scalatest.tools.Runner'
+    args = ['-R', 'build/classes/test', '-o']
+    classpath = sourceSets.test.runtimeClasspath
+}
