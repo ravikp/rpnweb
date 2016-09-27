@@ -19,3 +19,6 @@ cache:
 script:
   - ./gradlew check
   - ./gradlew jar
+
+notifications:
+  email: false
